@@ -5,7 +5,6 @@ class ipcRenderer {
   public emitter: EventEmitter
   private _event: MockedEvent
 
-
   constructor() {
     this.emitter = new EventEmitter
     this.emitter.on('receive-from-main', this._onReceiveFromMain.bind(this))
@@ -36,6 +35,5 @@ class ipcRenderer {
     this.emitter.removeAllListeners(ch)
   }
 }
-
 
 export default ipcRenderer

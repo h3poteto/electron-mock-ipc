@@ -6,7 +6,7 @@
   "typings": "./lib/src/index.d.ts",
   "scripts": {
     "build": "tsc -p ./",
-    "lint": "eslint --ext .js,.ts src",
+    "lint": "eslint --ext .js,.ts src test",
     "test": "NODE_ENV=test jest -u --maxWorkers=3"
   },
   "repository": "git@github.com:h3poteto/electron-mock-ipc.git",
@@ -47,8 +47,19 @@
     "@types/core-js": "^2.5.2",
     "@types/jest": "^24.0.15",
     "@types/node": "^12.0.12",
+    "@typescript-eslint/eslint-plugin": "^1.11.0",
+    "@typescript-eslint/parser": "^1.11.0",
     "electron": "^5.0.6",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.17.3",
+    "eslint-plugin-node": "^9.1.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-promise": "^4.1.1",
+    "eslint-plugin-standard": "^4.0.0",
     "jest": "^24.8.0",
+    "prettier": "^1.18.2",
     "ts-jest": "^24.0.2"
   }
 }
