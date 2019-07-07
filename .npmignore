@@ -1,0 +1,8 @@
+node_modules
+src
+test
+*.log
+.gitignore
+.travis.yml
+sideci.yml
+tsconfig.json
