@@ -2,9 +2,14 @@
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
-    "lib": ["es6", "dom", "dom.iterable"],
+    "lib": ["es6", "dom"],
     "declaration": true,
     "outDir": "./lib",
+    "baseUrl": "./",
+    "paths": {
+      "@*": ["./src*"],
+      "~*": ["./*"]
+    },
     "removeComments": true,
     "downlevelIteration": true,
     "strict": true,
@@ -19,6 +24,5 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "esModuleInterop": true
-  },
-  "include": ["./src"]
+  }
 }

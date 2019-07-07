@@ -1,11 +1,13 @@
-import { EventEmitter } from 'events'
+import ipcMain from './ipc-main'
+import ipcRenderer from './ipc-renderer'
 
-export default class Pipe extends EventEmitter {
-  sendFromMain(channel: string, ...args: any) {
-    setTimeout(() => this.emit('receive-renderer-event', channel, ...args), 1)
-  }
-
-  sendFromRenderer(channel: string, ...args: any) {
-    setTimeout(() => this.emit('receive-main-event', channel, ...args), 1)
-  }
+const pipe = (main: ipcMain, renderer: ipcRenderer) => {
+  main.emitter.on('send-to-renderer', (channel: string, ...args: any) => {
+    setTimeout(() => renderer.emitter.emit('receive-from-main', channel, ...args), 1)
+  })
+  renderer.emitter.on('send-to-main', (channel: string, ...args: any) => {
+    setTimeout(() => main.emitter.emit('receive-from-renderer', channel, ...args), 1)
+  })
 }
+
+export default pipe

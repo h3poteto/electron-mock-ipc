@@ -1,117 +1,38 @@
-import { Event, WebContents } from 'electron'
-import Pipe from './pipe'
-
-class Contents extends WebContents {
-  private _pipe: Pipe
-
-  constructor(pipe: Pipe) {
-    super()
-    this._pipe = pipe
-  }
-
-  send(channel: string, ...args: any) {
-    this._pipe.sendFromMain(channel, ...args)
-  }
-}
-
-class MainEvent implements Event {
-  public sender: WebContents
-  // Event interface
-  readonly bubbles: boolean
-  public cancelBubble: boolean
-  readonly cancelable: boolean
-  readonly composed: boolean
-  readonly currentTarget: EventTarget | null
-  readonly defaultPrevented: boolean
-  readonly eventPhase: number
-  readonly isTrusted: boolean
-  public returnValue: any
-  readonly srcElement: EventTarget | null
-  readonly target: EventTarget | null
-  readonly timeStamp: number
-  readonly type: string
-  readonly AT_TARGET: number;
-  readonly BUBBLING_PHASE: number;
-  readonly CAPTURING_PHASE: number;
-  readonly NONE: number;
-
-  constructor(pipe: Pipe) {
-    this.sender = new Contents(pipe)
-    // Event interface
-    this.bubbles = false
-    this.cancelBubble = false
-    this.cancelable = false
-    this.composed = false
-    this.currentTarget = null
-    this.defaultPrevented = false
-    this.eventPhase = 0
-    this.isTrusted = true
-    this.srcElement = null
-    this.target = null
-    this.timeStamp = 0
-    this.type = 'click'
-    this.AT_TARGET = 0
-    this.BUBBLING_PHASE = 0
-    this.CAPTURING_PHASE = 0
-    this.NONE = 0
-  }
-
-  preventDefault(): void {
-    return
-  }
-
-  composedPath(): EventTarget[] {
-    return []
-  }
-
-  initEvent(type: string, bubbles?: boolean, cancelable?: boolean): void {
-    return
-  }
-
-  stopImmediatePropagation(): void {
-    return
-  }
-
-  stopPropagation(): void {
-    return
-  }
-}
+import MockedEvent from './event'
+import { EventEmitter } from 'events'
 
 class ipcMain {
-  private _event: MainEvent
-  private _pipe: Pipe
+  public emitter: EventEmitter
+  private _event: MockedEvent
 
-  constructor(pipe: Pipe) {
-    this._event = new MainEvent(pipe)
-    this._pipe = pipe
+  constructor() {
+    this.emitter = new EventEmitter
+    this.emitter.on('receive-from-renderer', this._onReceiveFromRenderer.bind(this))
+    this._event = new MockedEvent(this.emitter, 'send-to-renderer')
   }
 
-  on(ch: string, listener: (ev: Event, args: any) => void) {
-    this._pipe.on('receive-main-event', (channel: string, obj: any) => {
-      if (ch === channel) {
-        listener(this._event, obj)
-      }
-    })
+  _onReceiveFromRenderer(channel: string, ...args: any) {
+    this.emitter.emit(channel, this._event, ...args)
   }
 
-  once(ch: string, listener: (ev: Event, args: any) => void) {
-    this._pipe.once('receive-main-event', (channel: string, obj: any) => {
-      if (ch === channel) {
-        listener(this._event, obj)
-      }
-    })
+  on(ch: string, listener: (ev: any, args: any) => void) {
+    this.emitter.on(ch, listener)
+  }
+
+  once(ch: string, listener: (ev: any, args: any) => void) {
+    this.emitter.once(ch, listener)
   }
 
   send(ch: string, ...args: any) {
-    this._pipe.sendFromMain(ch, ...args)
+    this.emitter.emit('send-to-renderer', ch, ...args)
   }
 
   removeListener(ch: string, listener: (...args: any[]) => void) {
-    this._pipe.removeListener(ch, listener)
+    this.emitter.removeListener(ch, listener)
   }
 
   removeAllListeners(ch?: string) {
-    this._pipe.removeAllListeners(ch)
+    this.emitter.removeAllListeners(ch)
   }
 }
 
