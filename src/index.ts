@@ -28,7 +28,9 @@ const createIPCMock = (): Mock => {
 
 export {
   ipcMain,
-  ipcRenderer
+  ipcRenderer,
+  pipe,
+  Mock
 }
 
 export default createIPCMock
