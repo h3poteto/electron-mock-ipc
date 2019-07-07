@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc -p ./",
     "lint": "eslint --ext .js,.ts src",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "NODE_ENV=test jest -u --maxWorkers=3"
   },
   "repository": "git@github.com:h3poteto/electron-mock-ipc.git",
   "keywords": [
@@ -18,12 +18,37 @@
   ],
   "author": "h3poteto",
   "license": "MIT",
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "moduleNameMapper": {
+      "^@/(.+)": "<rootDir>/src/$1",
+      "^~/(.+)": "<rootDir>/$1"
+    },
+    "testMatch": [
+      "**/test/**/*.spec.ts"
+    ],
+    "preset": "ts-jest/presets/default",
+    "transform": {
+      "^.+\\.(ts|tsx)$": "ts-jest"
+    },
+    "globals": {
+      "ts-jest": {
+        "tsConfig": "tsconfig.json"
+      }
+    }
+  },
   "dependencies": {
     "electron": "^5.0.6",
     "typescript": "^3.5.2"
   },
   "devDependencies": {
     "@types/core-js": "^2.5.2",
-    "@types/node": "^12.0.12"
+    "@types/jest": "^24.0.15",
+    "@types/node": "^12.0.12",
+    "jest": "^24.8.0",
+    "ts-jest": "^24.0.2"
   }
 }
