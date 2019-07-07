@@ -4,6 +4,11 @@
   "description": "Mock Electron's ipcMain and ipcRenderer",
   "main": "lib/index.js",
   "typings": "./lib/index.d.ts",
+  "scripts": {
+    "build": "tsc -p ./",
+    "lint": "eslint --ext .js,.ts src",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "repository": "git@github.com:h3poteto/electron-mock-ipc.git",
   "keywords": [
     "electron",

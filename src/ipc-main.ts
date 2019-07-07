@@ -15,14 +15,64 @@ class Contents extends WebContents {
 }
 
 class MainEvent implements Event {
-  public returnValue: any
   public sender: WebContents
+  // Event interface
+  readonly bubbles: boolean
+  public cancelBubble: boolean
+  readonly cancelable: boolean
+  readonly composed: boolean
+  readonly currentTarget: EventTarget | null
+  readonly defaultPrevented: boolean
+  readonly eventPhase: number
+  readonly isTrusted: boolean
+  public returnValue: any
+  readonly srcElement: EventTarget | null
+  readonly target: EventTarget | null
+  readonly timeStamp: number
+  readonly type: string
+  readonly AT_TARGET: number;
+  readonly BUBBLING_PHASE: number;
+  readonly CAPTURING_PHASE: number;
+  readonly NONE: number;
 
   constructor(pipe: Pipe) {
     this.sender = new Contents(pipe)
+    // Event interface
+    this.bubbles = false
+    this.cancelBubble = false
+    this.cancelable = false
+    this.composed = false
+    this.currentTarget = null
+    this.defaultPrevented = false
+    this.eventPhase = 0
+    this.isTrusted = true
+    this.srcElement = null
+    this.target = null
+    this.timeStamp = 0
+    this.type = 'click'
+    this.AT_TARGET = 0
+    this.BUBBLING_PHASE = 0
+    this.CAPTURING_PHASE = 0
+    this.NONE = 0
   }
 
   preventDefault(): void {
+    return
+  }
+
+  composedPath(): EventTarget[] {
+    return []
+  }
+
+  initEvent(type: string, bubbles?: boolean, cancelable?: boolean): void {
+    return
+  }
+
+  stopImmediatePropagation(): void {
+    return
+  }
+
+  stopPropagation(): void {
     return
   }
 }
