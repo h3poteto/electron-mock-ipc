@@ -1,6 +1,5 @@
-import { Event } from 'electron'
+import { IpcRendererEvent, IpcMainEvent } from 'electron'
 import createIPCMock, { ipcMain, ipcRenderer } from '@/index'
-
 
 describe('send from main', () => {
   let ipcMain: ipcMain
@@ -14,7 +13,7 @@ describe('send from main', () => {
 
   it('should be received', () => {
     const testMessage = 'test'
-    ipcMain.once('test-event', (ev: Event, obj: string) => {
+    ipcMain.once('test-event', (ev: IpcMainEvent, obj: string) => {
       expect(obj).toEqual(testMessage)
     })
 
@@ -23,10 +22,10 @@ describe('send from main', () => {
 
   it('should be resend and receive', () => {
     const testMessage = 'test'
-    ipcRenderer.once('response-test-event', (ev: Event, obj: string) => {
+    ipcRenderer.once('response-test-event', (ev: IpcRendererEvent, obj: string) => {
       expect(obj).toEqual(testMessage)
     })
-    ipcMain.once('test-event', (ev: Event, obj: string) => {
+    ipcMain.once('test-event', (ev: IpcMainEvent, obj: string) => {
       ev.sender.send('response-test-event', obj)
     })
 
@@ -46,7 +45,7 @@ describe('send from renderer', () => {
 
   it('should be received', () => {
     const testMessage = 'test'
-    ipcRenderer.once('test-event', (ev: Event, obj: string) => {
+    ipcRenderer.once('test-event', (ev: IpcRendererEvent, obj: string) => {
       expect(obj).toEqual(testMessage)
     })
 
@@ -55,10 +54,10 @@ describe('send from renderer', () => {
 
   it('should be resend and receive', () => {
     const testMessage = 'test'
-    ipcMain.once('response-test-event', (ev: Event, obj: string) => {
+    ipcMain.once('response-test-event', (ev: IpcMainEvent, obj: string) => {
       expect(obj).toEqual(testMessage)
     })
-    ipcRenderer.once('test-event', (ev: Event, obj: string) => {
+    ipcRenderer.once('test-event', (ev: IpcRendererEvent, obj: string) => {
       ev.sender.send('response-test-event', obj)
     })
 
