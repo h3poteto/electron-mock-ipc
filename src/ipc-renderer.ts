@@ -1,12 +1,13 @@
 import MockedEvent from './event'
 import { EventEmitter } from 'events'
+import { IpcRenderer, IpcRendererEvent } from 'electron'
 
-class ipcRenderer {
+class ipcRenderer implements IpcRenderer {
   public emitter: EventEmitter
   private _event: MockedEvent
 
   constructor() {
-    this.emitter = new EventEmitter
+    this.emitter = new EventEmitter()
     this.emitter.on('receive-from-main', this._onReceiveFromMain.bind(this))
     this._event = new MockedEvent(this.emitter, 'send-to-main')
   }
@@ -15,24 +16,88 @@ class ipcRenderer {
     this.emitter.emit(channel, this._event, ...args)
   }
 
-  on(ch: string, listener: (ev: any, args: any) => void) {
-    this.emitter.on(ch, listener)
+  on(channel: string, listener: (ev: IpcRendererEvent, ...args: any[]) => void): any {
+    this.emitter.on(channel, listener)
   }
 
-  once(ch: string, listener: (ev: any, args: any) => void) {
-    this.emitter.once(ch, listener)
+  once(channel: string, listener: (ev: IpcRendererEvent, ...args: any) => void): any {
+    this.emitter.once(channel, listener)
   }
 
-  send(ch: string, ...args: any) {
-    this.emitter.emit('send-to-main', ch, ...args)
+  send(channel: string, ...args: any[]): void {
+    this.emitter.emit('send-to-main', channel, ...args)
   }
 
-  removeListener(ch: string, listener: (...args: any[]) => void) {
-    this.emitter.removeListener(ch, listener)
+  removeListener(channel: string, listener: (...args: any[]) => void): any {
+    this.emitter.removeListener(channel, listener)
   }
 
-  removeAllListeners(ch?: string) {
-    this.emitter.removeAllListeners(ch)
+  removeAllListeners(channel: string): any {
+    this.emitter.removeAllListeners(channel)
+  }
+
+  /**
+   * Unused methods for mock
+   * These methods are defined in electron
+   */
+  invoke(_channel: string, ...args: any[]): Promise<any> {
+    return new Promise(resolve => {
+      console.log(args)
+      resolve(args)
+    })
+  }
+
+  sendSync(_channel: string, ...args: any[]): any {
+    console.log(args)
+  }
+
+  sendTo(_webContentsId: number, _channel: string, ...args: any[]): void {
+    console.log(args)
+  }
+
+  sendToHost(_channel: string, ...args: any[]): void {
+    console.log(args)
+  }
+
+  /**
+   * Unused methods for mock
+   * These methods are defined in node
+   */
+  addListener(_event: string | symbol, _listener: (...args: any[]) => void): any {}
+  off(_event: string | symbol, _listener: (...args: any[]) => void): any {}
+  setMaxListeners(_n: number): any {}
+
+  getMaxListeners(): number {
+    return 1
+  }
+
+  listeners(_event: string | symbol): Function[] {
+    const undef = () => {
+      console.log('undefined')
+    }
+    return [undef]
+  }
+
+  rawListeners(_event: string | symbol): Function[] {
+    const undef = () => {
+      console.log('undefined')
+    }
+    return [undef]
+  }
+
+  emit(_event: string | symbol, ..._args: any[]): boolean {
+    return true
+  }
+
+  listenerCount(_type: string | symbol): number {
+    return 1
+  }
+
+  prependListener(_event: string | symbol, _listener: (...args: any[]) => void): any {}
+  prependOnceListener(_event: string | symbol, _listener: (...args: any[]) => void): any {}
+
+  eventNames(): Array<string | symbol> {
+    return ['undefined']
   }
 }
 
