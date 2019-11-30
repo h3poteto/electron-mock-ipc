@@ -38,7 +38,7 @@ class ipcRenderer implements IpcRenderer {
 
   invoke(channel: string, ...args: any[]): Promise<any> {
     return new Promise(resolve => {
-      this.emitter.once(channel, (...args: any[]) => {
+      this.emitter.once(channel, (_ev: IpcRendererEvent, ...args: any[]) => {
         resolve(...args)
       })
       this.emitter.emit('send-to-main', channel, ...args)

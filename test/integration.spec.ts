@@ -1,5 +1,6 @@
 import { IpcRendererEvent, IpcMainEvent } from 'electron'
 import createIPCMock, { ipcMain, ipcRenderer } from '@/index'
+import { sleepMethod } from './helper'
 
 describe('send event from renderer to main', () => {
   let ipcMain: ipcMain
@@ -59,6 +60,30 @@ describe('send event from renderer to main', () => {
       })
 
       ipcRenderer.send('test-event', testMessage)
+    })
+  })
+
+  describe('invoke', () => {
+    afterEach(() => {
+      ipcMain.removeHandler('test-event')
+    })
+
+    it('should handle events', async () => {
+      ipcMain.handle('test-event', async (_event, args) => {
+        const result = await sleepMethod(args)
+        return result
+      })
+      const res = await ipcRenderer.invoke('test-event', 'hoge')
+      expect(res).toEqual('hoge')
+    })
+
+    it('should handle once an event', async () => {
+      ipcMain.handleOnce('test-event', async (_event, args) => {
+        const result = await sleepMethod(args)
+        return result
+      })
+      const res = await ipcRenderer.invoke('test-event', 'hoge')
+      expect(res).toEqual('hoge')
     })
   })
 })

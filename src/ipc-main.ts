@@ -36,17 +36,17 @@ class ipcMain implements IpcMain {
     this.emitter.removeAllListeners(channel)
   }
 
-  handle(channel: string, listener: (event: IpcMainInvokeEvent, ...args: any[]) => (Promise<void>) | (any)): void {
-    this.emitter.on(channel, async(event: IpcMainEvent, ...args: any[]) => {
+  handle(channel: string, listener: (event: IpcMainInvokeEvent, ...args: any[]) => Promise<void> | any): void {
+    this.emitter.on(channel, async (event: IpcMainEvent, ...args: any[]) => {
       const res = await listener(event, ...args)
-      this.emitter.emit('sent-to-renderer', channel, res)
+      this.emitter.emit('send-to-renderer', channel, res)
     })
   }
 
-  handleOnce(channel: string, listener: (event: IpcMainInvokeEvent, ...args: any[]) => (Promise<void>) | (any)): void {
-    this.emitter.once(channel, async(event: IpcMainEvent, ...args: any[]) => {
+  handleOnce(channel: string, listener: (event: IpcMainInvokeEvent, ...args: any[]) => Promise<void> | any): void {
+    this.emitter.once(channel, async (event: IpcMainEvent, ...args: any[]) => {
       const res = await listener(event, ...args)
-      this.emitter.emit('sent-to-renderer', channel, res)
+      this.emitter.emit('send-to-renderer', channel, res)
     })
   }
 
