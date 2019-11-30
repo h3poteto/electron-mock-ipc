@@ -36,17 +36,27 @@ class ipcMain implements IpcMain {
     this.emitter.removeAllListeners(channel)
   }
 
-  /**
-   * Unused methods for mock
-   * These methods are defined in electron
-   */
-  handle(_channel: string, _listener: (event: IpcMainInvokeEvent, ...args: any[]) => (Promise<void>) | (any)): void {}
-  handleOnce(_channel: string, _listener: (event: IpcMainInvokeEvent, ...args: any[]) => (Promise<void>) | (any)): void {}
-  removeHandler(_channel: string): void {}
+  handle(channel: string, listener: (event: IpcMainInvokeEvent, ...args: any[]) => (Promise<void>) | (any)): void {
+    this.emitter.on(channel, async(event: IpcMainEvent, ...args: any[]) => {
+      const res = await listener(event, ...args)
+      this.emitter.emit('sent-to-renderer', channel, res)
+    })
+  }
+
+  handleOnce(channel: string, listener: (event: IpcMainInvokeEvent, ...args: any[]) => (Promise<void>) | (any)): void {
+    this.emitter.once(channel, async(event: IpcMainEvent, ...args: any[]) => {
+      const res = await listener(event, ...args)
+      this.emitter.emit('sent-to-renderer', channel, res)
+    })
+  }
+
+  removeHandler(channel: string): void {
+    this.emitter.removeAllListeners(channel)
+  }
 
   /**
-   * Unused methods for mock
-   * These methods are defined in node
+   * Unused methods for mock.
+   * These methods are defined in node.
    */
   addListener(_event: string | symbol, _listener: (...args: any[]) => void): any {}
   off(_event: string | symbol, _listener: (...args: any[]) => void): any {}
