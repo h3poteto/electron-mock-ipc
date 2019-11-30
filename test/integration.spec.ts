@@ -33,6 +33,34 @@ describe('send event from renderer to main', () => {
       ipcRenderer.send('test-event', testMessage)
     })
   })
+
+  describe('send and on', () => {
+    afterEach(() => {
+      ipcMain.removeAllListeners('test-event')
+      ipcRenderer.removeAllListeners('response-test-event')
+    })
+
+    it('should be received in main', () => {
+      const testMessage = 'test'
+      ipcMain.on('test-event', (_ev: IpcMainEvent, obj: string) => {
+        expect(obj).toEqual(testMessage)
+      })
+
+      ipcRenderer.send('test-event', testMessage)
+    })
+
+    it('should be resent and received', () => {
+      const testMessage = 'test'
+      ipcRenderer.on('response-test-event', (_ev: IpcRendererEvent, obj: string) => {
+        expect(obj).toEqual(testMessage)
+      })
+      ipcMain.on('test-event', (ev: IpcMainEvent, obj: string) => {
+        ev.sender.send('response-test-event', obj)
+      })
+
+      ipcRenderer.send('test-event', testMessage)
+    })
+  })
 })
 
 describe('send event from main to renderer', () => {
@@ -61,6 +89,33 @@ describe('send event from main to renderer', () => {
         expect(obj).toEqual(testMessage)
       })
       ipcRenderer.once('test-event', (ev: IpcRendererEvent, obj: string) => {
+        ev.sender.send('response-test-event', obj)
+      })
+
+      ipcMain.send('test-event', testMessage)
+    })
+  })
+
+  describe('send and on', () => {
+    afterEach(() => {
+      ipcMain.removeAllListeners('response-test-event')
+      ipcRenderer.removeAllListeners('test-event')
+    })
+    it('should be received in renderer', () => {
+      const testMessage = 'test'
+      ipcRenderer.on('test-event', (_ev: IpcRendererEvent, obj: string) => {
+        expect(obj).toEqual(testMessage)
+      })
+
+      ipcMain.send('test-event', testMessage)
+    })
+
+    it('should be resent and received', () => {
+      const testMessage = 'test'
+      ipcMain.on('response-test-event', (_ev: IpcMainEvent, obj: string) => {
+        expect(obj).toEqual(testMessage)
+      })
+      ipcRenderer.on('test-event', (ev: IpcRendererEvent, obj: string) => {
         ev.sender.send('response-test-event', obj)
       })
 
