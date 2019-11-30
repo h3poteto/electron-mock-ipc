@@ -36,17 +36,19 @@ class ipcRenderer implements IpcRenderer {
     this.emitter.removeAllListeners(channel)
   }
 
-  /**
-   * Unused methods for mock
-   * These methods are defined in electron
-   */
-  invoke(_channel: string, ...args: any[]): Promise<any> {
+  invoke(channel: string, ...args: any[]): Promise<any> {
     return new Promise(resolve => {
-      console.log(args)
-      resolve(args)
+      this.emitter.once(channel, (_ev: IpcRendererEvent, ...args: any[]) => {
+        resolve(...args)
+      })
+      this.emitter.emit('send-to-main', channel, ...args)
     })
   }
 
+  /**
+   * TODO: Implement these methods.
+   * These methods are defined in electron.
+   */
   sendSync(_channel: string, ...args: any[]): any {
     console.log(args)
   }
@@ -60,8 +62,8 @@ class ipcRenderer implements IpcRenderer {
   }
 
   /**
-   * Unused methods for mock
-   * These methods are defined in node
+   * Unused methods for mock.
+   * These methods are defined in node.
    */
   addListener(_event: string | symbol, _listener: (...args: any[]) => void): any {}
   off(_event: string | symbol, _listener: (...args: any[]) => void): any {}
