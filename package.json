@@ -2,8 +2,8 @@
   "name": "electron-mock-ipc",
   "version": "0.2.0",
   "description": "Mock Electron's ipcMain and ipcRenderer",
-  "main": "lib/index.js",
-  "typings": "./lib/index.d.ts",
+  "main": "lib/src/index.js",
+  "typings": "./lib/src/index.d.ts",
   "scripts": {
     "build": "tsc -p ./",
     "lint": "eslint --ext .js,.ts src test",
