@@ -13,12 +13,12 @@
       "json"
     ],
     "moduleNameMapper": {
-      "electron": "<rootDir>/spec/mock.ts"
+      "$/electron": "<rootDir>/__mocks__/electron.ts"
     },
     "testMatch": [
       "**/spec/**/*.spec.ts"
     ],
-    "preset": "ts-jest/presets/js-with-ts",
+    "preset": "ts-jest/presets/default",
     "transform": {
       "^.+\\.(js|jsx)$": "ts-jest",
       "^.+\\.(ts|tsx)$": "ts-jest"

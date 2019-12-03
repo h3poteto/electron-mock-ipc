@@ -1,5 +1,5 @@
 import index from '../src/index'
-import { ipcMain } from './mock'
+import { ipcMain } from '../__mocks__/electron'
 import { IpcMainEvent } from 'electron'
 
 describe('index', () => {
