@@ -1,0 +1,46 @@
+{
+  "name": "app",
+  "version": "0.1.0",
+  "author": "h3poteto",
+  "license": "MIT",
+  "scripts": {
+    "spec": "NODE_ENV=test jest -u --maxWorkers=3"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "js",
+      "json"
+    ],
+    "moduleNameMapper": {
+      "electron": "<rootDir>/spec/mock.ts"
+    },
+    "testMatch": [
+      "**/spec/**/*.spec.ts"
+    ],
+    "preset": "ts-jest/presets/js-with-ts",
+    "transform": {
+      "^.+\\.(js|jsx)$": "ts-jest",
+      "^.+\\.(ts|tsx)$": "ts-jest"
+    },
+    "setupFiles": [
+      "core-js"
+    ],
+    "globals": {
+      "ts-jest": {
+        "tsConfig": "tsconfig.json"
+      }
+    }
+  },
+  "dependencies": {
+    "electron": "7.1.2",
+    "electron-mock-ipc": "file:../../"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.23",
+    "@types/node": "^12.12.14",
+    "core-js": "^3.4.7",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.2.0"
+  }
+}
