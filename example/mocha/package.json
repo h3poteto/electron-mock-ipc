@@ -1,0 +1,22 @@
+{
+  "name": "mocha",
+  "version": "0.1.0",
+  "main": "index.js",
+  "author": "h3poteto",
+  "license": "MIT",
+  "scripts": {
+    "spec": "NODE_ENV=test mocha -r ts-node/register ./spec/**/*.spec.ts"
+  },
+  "dependencies": {
+    "electron": "7.1.2",
+    "electron-mock-ipc": "file:../../"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.6",
+    "@types/mocha": "^5.2.7",
+    "chai": "^4.2.0",
+    "mocha": "^6.2.2",
+    "ts-node": "^8.5.4",
+    "typescript": "^3.7.2"
+  }
+}
