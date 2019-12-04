@@ -81,7 +81,7 @@ In Jest, please inject ipcRenderer object to global in your test.
 ```typescript
 import { IpcMainEvent } from 'electron'
 import { ipcMain, ipcRenderer } from '~/spec/mock/electron'
-import { targetMethod } from '~/src/target`
+import { targetMethod } from '~/src/target'
 
 window.ipcRenderer = ipcRenderer
 
