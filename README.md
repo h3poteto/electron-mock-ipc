@@ -2,6 +2,8 @@
 [![Build Status](https://travis-ci.com/h3poteto/electron-mock-ipc.svg?branch=master)](https://travis-ci.com/h3poteto/electron-mock-ipc)
 [![npm](https://img.shields.io/npm/v/electron-mock-ipc.svg)](https://www.npmjs.com/package/electron-mock-ipc)
 [![GitHub release](https://img.shields.io/github/release/h3poteto/electron-mock-ipc.svg)](https://github.com/h3poteto/electron-mock-ipc/releases)
+[![npm](https://img.shields.io/npm/dm/electron-mock-ipc)](https://www.npmjs.com/package/electron-mock-ipc)
+[![NPM](https://img.shields.io/npm/l/electron-mock-ipc)](/LICENSE.txt)
 
 This is a mock library for ipcMain and ipcRenderer in Electron. There are communicate each other, so you can mock ipc methods for your tests without changing your production code.
 
@@ -9,16 +11,17 @@ This is a mock library for ipcMain and ipcRenderer in Electron. There are commun
 ## Install
 
 ```
-$ npm install -S electron-mock-ipc
+$ npm install --save-dev electron-mock-ipc
 ```
 
 or
 
 ```
-$ yarn add electron-mock-ipc
+$ yarn add --dev electron-mock-ipc
 ```
 
 ## Usage
+This library can use in jest, and mocha.
 
 At first, please create a file to mock:
 
@@ -30,41 +33,105 @@ const ipcMain = mocked.ipcMain
 const ipcRenderer = mocked.ipcRenderer
 export { ipcMain, ipcRenderer }
 ```
-and save it as `test/mock/electron-mock.ts`.
+and save it as `spec/mock/electron-mock.ts`.
 
-Then, please override electron with mock in test. I present a jest example, please write following code in your `package.json`.
 
-```json
-  ...
-  "jest": {
-    "moduleFileExtensions": [
-      "ts",
-      "js"
-    ],
-    "moduleNameMapper": {
-      "electron": "<rootDir>/test/mock/electron-mock.ts"
-    }
-  },
-  ...
-```
-
-After that, all electron instances are mocked, so you can call in tests.
+I assume you are using a preload script for nodeIntegration, like this:
 
 ```typescript
-import { ipcMain, ipcRenderer } from 'electron'
-
-describe('your test', () => {
-  it('should be received', () => {
-    const testMessage = 'test'
-    ipcMain.once('test-event', (ev: Event, obj: string) => {
-      expect(obj).toEqual(testMessage)
-    })
-
-    ipcRenderer.send('test-event', testMessage)
+app.on('ready', () => {
+  // Create the browser window.
+  win = new BrowserWindow({
+      webPreferences: {
+        preload: path.join(__dirname, './preload.js'),
+        nodeIntegration: false,
+        enableRemoteModule: false
+      }
   })
 })
 ```
 
+And `ipcRenderer` object assign to window(global) in `preload.js`.
+
+```javascript
+import { ipcRenderer } from 'electron'
+
+global.ipcRenderer = ipcRenderer
+```
+
+In this time, you would be using ipcRenderer through window object in renderer process.
+
+```typescript
+export const targetMethod = () => {
+  return new Promise(resolve => {
+    window.ipcRenderer.once('response-test-event', (ev: IpcRendererEvent, obj: string) => {
+      console.log(obj)
+      resolve(obj)
+    })
+    window.ipcRenderer.send('test-event', 'hoge')
+  })
+}
+```
+
+If you don't know why recommend this method, please see https://stackoverflow.com/questions/52236641/electron-ipc-and-nodeintegration .
+
+### Jest
+In Jest, please inject ipcRenderer object to global in your test.
+
+```typescript
+import { IpcMainEvent } from 'electron'
+import { ipcMain, ipcRenderer } from '~/spec/mock/electron'
+import { targetMethod } from '~/src/target`
+
+window.ipcRenderer = ipcRenderer
+
+describe('your test', () => {
+  it('should be received', async () => {
+    ipcMain.once('test-event', (event: IpcMainEvent, obj: string) => {
+      event.sender.send('response-test-event', 'response' + obj)
+    })
+    const res = await targetMethod()
+    expect(res).toEqual('responsehoge')
+  })
+})
+```
+
+### Mocha
+In Mocha, you can not inejct mock in test. So, please inject ipcRendere object in `preload.js`.
+
+```javascript
+import { ipcRenderer } from 'electron'
+import { ipcRenderer as mock } from '~/spec/mock/electron'
+
+if (process.env.NODE_ENV === 'test') {
+  global.ipcRenderer = mock
+} else {
+  global.ipcRenderer = ipcRenderer
+}
+```
+
+And write test.
+
+```typescript
+import { IpcMainEvent } from 'electron'
+import { targetMethod } from '~/src/target'
+import { ipcMain } from '~/spec/mock/electron'
+import { describe, it } from 'mocha'
+import { expect } from 'chai'
+
+describe('your test', () => {
+  it('should be received', async () => {
+    ipcMain.once('test-event', (event: IpcMainEvent, obj: string) => {
+      event.sender.send('response-test-event', 'response' + obj)
+    })
+    const res = await targetMethod()
+    expect(res).to.equal('responsehoge')
+  })
+})
+```
+
+## Example
+I prepared test example, please refer [here](example).
 
 ## License
 
