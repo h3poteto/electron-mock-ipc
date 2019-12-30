@@ -13,7 +13,7 @@
       "json"
     ],
     "moduleNameMapper": {
-      "$/electron": "<rootDir>/__mocks__/electron.ts"
+      "^electron$": "<rootDir>/__mocks__/electron.ts"
     },
     "testMatch": [
       "**/spec/**/*.spec.ts"

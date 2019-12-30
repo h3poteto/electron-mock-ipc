@@ -1,5 +1,4 @@
-require('./preload')
-const ipcRenderer = (global as any).ipcRenderer
+import { ipcRenderer } from 'electron'
 
 const index = () => {
   return new Promise(resolve => {
