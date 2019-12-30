@@ -1,7 +1,6 @@
 import index from '../src/index'
-import { ipcMain, ipcRenderer } from '../__mocks__/electron'
+import { ipcMain } from '../__mocks__/electron'
 import { IpcMainEvent } from 'electron'
-;(global as any).ipcRenderer = ipcRenderer
 
 describe('index', () => {
   beforeEach(() => {

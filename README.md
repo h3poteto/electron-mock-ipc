@@ -36,54 +36,23 @@ export { ipcMain, ipcRenderer }
 and save it as `spec/mock/electron-mock.ts`.
 
 
-I assume you are using a preload script for nodeIntegration, like this:
-
-```typescript
-app.on('ready', () => {
-  // Create the browser window.
-  win = new BrowserWindow({
-      webPreferences: {
-        preload: path.join(__dirname, './preload.js'),
-        nodeIntegration: false,
-        enableRemoteModule: false
-      }
-  })
-})
-```
-
-And `ipcRenderer` object assign to window(global) in `preload.js`.
-
-```javascript
-import { ipcRenderer } from 'electron'
-
-global.ipcRenderer = ipcRenderer
-```
-
-In this time, you would be using ipcRenderer through window object in renderer process.
-
-```typescript
-export const targetMethod = () => {
-  return new Promise(resolve => {
-    window.ipcRenderer.once('response-test-event', (ev: IpcRendererEvent, obj: string) => {
-      console.log(obj)
-      resolve(obj)
-    })
-    window.ipcRenderer.send('test-event', 'hoge')
-  })
-}
-```
-
-If you don't know why recommend this method, please see https://stackoverflow.com/questions/52236641/electron-ipc-and-nodeintegration .
-
 ### Jest
-In Jest, please inject ipcRenderer object to global in your test.
+In Jest, please replace electron object using `moduleNameMapper`. Please override it in `package.json`.
+
+```json
+  "jest": {
+    "moduleNameMapper": {
+      "^electron$": "<rootDir>/spec/mock/electron-mock.ts"
+    }
+  }
+```
+
+After that, all ipc objects are mocked, so you can write tests as below.
 
 ```typescript
 import { IpcMainEvent } from 'electron'
-import { ipcMain, ipcRenderer } from '~/spec/mock/electron'
+import { ipcMain } from '~/spec/mock/electron-mock'
 import { targetMethod } from '~/src/target'
-
-window.ipcRenderer = ipcRenderer
 
 describe('your test', () => {
   it('should be received', async () => {
@@ -97,11 +66,11 @@ describe('your test', () => {
 ```
 
 ### Mocha
-In Mocha, you can not inejct mock in test. So, please inject ipcRendere object in `preload.js`.
+In Mocha, you can not inejct mock object easily. So, please inject ipcRendere object in `preload.js`, and use `preload.js` to load electron.
 
 ```javascript
 import { ipcRenderer } from 'electron'
-import { ipcRenderer as mock } from '~/spec/mock/electron'
+import { ipcRenderer as mock } from '~/spec/mock/electron-mock'
 
 if (process.env.NODE_ENV === 'test') {
   global.ipcRenderer = mock
@@ -109,6 +78,9 @@ if (process.env.NODE_ENV === 'test') {
   global.ipcRenderer = ipcRenderer
 }
 ```
+
+`preload.js` is used to disable nodeIntegration, please refer [here](https://stackoverflow.com/questions/52236641/electron-ipc-and-nodeintegration).
+
 
 And write test.
 
