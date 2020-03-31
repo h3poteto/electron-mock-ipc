@@ -1,6 +1,6 @@
 {
   "name": "electron-mock-ipc",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Mock Electron's ipcMain and ipcRenderer",
   "main": "lib/src/index.js",
   "typings": "./lib/src/index.d.ts",
