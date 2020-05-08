@@ -92,7 +92,7 @@ class ipcMain implements IpcMain {
   prependOnceListener(_event: string | symbol, _listener: (...args: any[]) => void): any {}
 
   eventNames(): Array<string | symbol> {
-    return ['undefined']
+    return this.emitter.eventNames()
   }
 }
 

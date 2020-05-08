@@ -148,3 +148,24 @@ describe('send event from main to renderer', () => {
     })
   })
 })
+
+describe('registered event handlers are returned from #eventNames', () => {
+  let ipcMain: ipcMain
+  let ipcRenderer: ipcRenderer
+
+  beforeEach(() => {
+    const mocked = createIPCMock()
+    ipcMain = mocked.ipcMain
+    ipcRenderer = mocked.ipcRenderer
+  })
+
+  it('ipcMain should return the events that were registered', () => {
+    ipcMain.on('test-event', () => null)
+    expect(ipcMain.eventNames()).toEqual(expect.arrayContaining(['test-event']))
+  })
+
+  it('ipcRenderer should return the events that were registered', () => {
+    ipcRenderer.on('test-event', () => null)
+    expect(ipcRenderer.eventNames()).toEqual(expect.arrayContaining(['test-event']))
+  })
+})
