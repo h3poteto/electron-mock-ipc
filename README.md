@@ -5,7 +5,7 @@
 [![npm](https://img.shields.io/npm/dm/electron-mock-ipc)](https://www.npmjs.com/package/electron-mock-ipc)
 [![NPM](https://img.shields.io/npm/l/electron-mock-ipc)](/LICENSE.txt)
 
-This is a mock library for ipcMain and ipcRenderer in Electron. There are communicate each other, so you can mock ipc methods for your tests without changing your production code.
+This is a mock library for ipcMain and ipcRenderer in Electron. They communicate with each other, so you can mock ipc methods in your tests without changing your production code.
 
 
 ## Install
@@ -66,7 +66,7 @@ describe('your test', () => {
 ```
 
 ### Mocha
-In Mocha, you can not inejct mock object easily. So, please inject ipcRendere object in `preload.js`, and use `preload.js` to load electron.
+In Mocha, you can not inject a mock object easily. So, please inject the ipcRenderer object in `preload.js`, and use `preload.js` to load electron.
 
 ```javascript
 import { ipcRenderer } from 'electron'
@@ -103,7 +103,7 @@ describe('your test', () => {
 ```
 
 ## Example
-I prepared test example, please refer [here](example).
+I prepared a test example, please refer [here](example).
 
 ## License
 
