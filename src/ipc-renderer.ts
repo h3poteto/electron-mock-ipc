@@ -37,7 +37,7 @@ class ipcRenderer implements IpcRenderer {
   }
 
   invoke(channel: string, ...args: any[]): Promise<any> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       this.emitter.once(channel, (_ev: IpcRendererEvent, ...args: any[]) => {
         resolve(...args)
       })
@@ -59,6 +59,10 @@ class ipcRenderer implements IpcRenderer {
 
   sendToHost(_channel: string, ...args: any[]): void {
     console.log(args)
+  }
+
+  postMessage(_channel: string, message: any, _transfer?: MessagePort[]): void {
+    console.log(message)
   }
 
   /**
