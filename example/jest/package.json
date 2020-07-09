@@ -33,7 +33,7 @@
     }
   },
   "dependencies": {
-    "electron": "7.1.2",
+    "electron": "9.0.3",
     "electron-mock-ipc": "file:../../"
   },
   "devDependencies": {
