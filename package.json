@@ -43,7 +43,7 @@
       }
     }
   },
-  "dependencies": {
+  "peerDependencies": {
     "electron": ">=6.0.0"
   },
   "devDependencies": {
@@ -63,6 +63,7 @@
     "jest": "^25.2.4",
     "prettier": "^2.0.2",
     "ts-jest": "^25.3.0",
-    "typescript": "^3.5.2"
+    "typescript": "^3.5.2",
+    "electron": "^9.1.2"
   }
 }
