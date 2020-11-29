@@ -5,6 +5,9 @@ const pipe = (main: ipcMain, renderer: ipcRenderer) => {
   main.emitter.on('send-to-renderer', (channel: string, ...args: any) => {
     setTimeout(() => renderer.emitter.emit('receive-from-main', channel, ...args), 1)
   })
+  main.emitter.on('error-to-renderer', (channel: string, err: any) => {
+    setTimeout(() => renderer.emitter.emit('error-from-main', channel, err), 1)
+  })
   renderer.emitter.on('send-to-main', (channel: string, ...args: any) => {
     setTimeout(() => main.emitter.emit('receive-from-renderer', channel, ...args), 1)
   })
@@ -21,15 +24,11 @@ const createIPCMock = (): Mock => {
   pipe(main, renderer)
   const mock: Mock = {
     ipcMain: main,
-    ipcRenderer: renderer
+    ipcRenderer: renderer,
   }
   return mock
 }
 
-export {
-  ipcMain,
-  ipcRenderer,
-  pipe
-}
+export { ipcMain, ipcRenderer, pipe }
 
 export default createIPCMock
