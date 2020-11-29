@@ -85,6 +85,13 @@ describe('send event from renderer to main', () => {
       const res = await ipcRenderer.invoke('test-event', 'hoge')
       expect(res).toEqual('hoge')
     })
+
+    it('should handle error events', async () => {
+      ipcMain.handle('test-event', async (_event, _args) => {
+        throw new Error()
+      })
+      await expect(ipcRenderer.invoke('test-event', 'hoge')).rejects.toThrow(Error)
+    })
   })
 })
 
