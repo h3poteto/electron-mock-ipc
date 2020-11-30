@@ -77,6 +77,13 @@ describe('send event from renderer to main', () => {
       expect(res).toEqual('hoge')
     })
 
+    it('should handle error events', async () => {
+      ipcMain.handle('test-event', async (_event, _args) => {
+        throw new Error()
+      })
+      await expect(ipcRenderer.invoke('test-event', 'hoge')).rejects.toThrow(Error)
+    })
+
     it('should handle once an event', async () => {
       ipcMain.handleOnce('test-event', async (_event, args) => {
         const result = await sleepMethod(args)
@@ -86,8 +93,8 @@ describe('send event from renderer to main', () => {
       expect(res).toEqual('hoge')
     })
 
-    it('should handle error events', async () => {
-      ipcMain.handle('test-event', async (_event, _args) => {
+    it('should handle once an error event', async () => {
+      ipcMain.handleOnce('test-event', async (_event, _args) => {
         throw new Error()
       })
       await expect(ipcRenderer.invoke('test-event', 'hoge')).rejects.toThrow(Error)
