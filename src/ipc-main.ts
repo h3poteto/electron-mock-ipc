@@ -38,15 +38,23 @@ class ipcMain implements IpcMain {
 
   handle(channel: string, listener: (event: IpcMainInvokeEvent, ...args: any[]) => Promise<void> | any): void {
     this.emitter.on(channel, async (event: IpcMainEvent, ...args: any[]) => {
-      const res = await listener(event, ...args)
-      this.emitter.emit('send-to-renderer', channel, res)
+      try {
+        const res = await listener(event, ...args)
+        this.emitter.emit('send-to-renderer', channel, res)
+      } catch (err) {
+        this.emitter.emit('error-to-renderer', channel, err)
+      }
     })
   }
 
   handleOnce(channel: string, listener: (event: IpcMainInvokeEvent, ...args: any[]) => Promise<void> | any): void {
     this.emitter.once(channel, async (event: IpcMainEvent, ...args: any[]) => {
-      const res = await listener(event, ...args)
-      this.emitter.emit('send-to-renderer', channel, res)
+      try {
+        const res = await listener(event, ...args)
+        this.emitter.emit('send-to-renderer', channel, res)
+      } catch (err) {
+        this.emitter.emit('error-to-renderer', channel, err)
+      }
     })
   }
 

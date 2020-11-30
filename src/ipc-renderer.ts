@@ -4,16 +4,23 @@ import { IpcRenderer, IpcRendererEvent } from 'electron'
 
 class ipcRenderer implements IpcRenderer {
   public emitter: EventEmitter
+  public errorEmitter: EventEmitter
   private _event: MockedEvent
 
   constructor() {
     this.emitter = new EventEmitter()
+    this.errorEmitter = new EventEmitter()
     this.emitter.on('receive-from-main', this._onReceiveFromMain.bind(this))
+    this.emitter.on('error-from-main', this._onErrorFromMain.bind(this))
     this._event = new MockedEvent(this.emitter, 'send-to-main')
   }
 
   _onReceiveFromMain(channel: string, ...args: any) {
     this.emitter.emit(channel, this._event, ...args)
+  }
+
+  _onErrorFromMain(channel: string, err: any) {
+    this.errorEmitter.emit(channel, this._event, err)
   }
 
   on(channel: string, listener: (ev: IpcRendererEvent, ...args: any[]) => void): any {
@@ -37,9 +44,12 @@ class ipcRenderer implements IpcRenderer {
   }
 
   invoke(channel: string, ...args: any[]): Promise<any> {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       this.emitter.once(channel, (_ev: IpcRendererEvent, ...args: any[]) => {
         resolve(...args)
+      })
+      this.errorEmitter.once(channel, (_ev: IpcRendererEvent, err: any) => {
+        reject(err)
       })
       this.emitter.emit('send-to-main', channel, ...args)
     })
