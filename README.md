@@ -1,5 +1,5 @@
 # ElectronMockIPC
-[![Build Status](https://travis-ci.com/h3poteto/electron-mock-ipc.svg?branch=master)](https://travis-ci.com/h3poteto/electron-mock-ipc)
+[![Test](https://github.com/h3poteto/electron-mock-ipc/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/h3poteto/electron-mock-ipc/actions/workflows/test.yml)
 [![npm](https://img.shields.io/npm/v/electron-mock-ipc.svg)](https://www.npmjs.com/package/electron-mock-ipc)
 [![GitHub release](https://img.shields.io/github/release/h3poteto/electron-mock-ipc.svg)](https://github.com/h3poteto/electron-mock-ipc/releases)
 [![npm](https://img.shields.io/npm/dm/electron-mock-ipc)](https://www.npmjs.com/package/electron-mock-ipc)
