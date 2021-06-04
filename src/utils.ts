@@ -1,1 +1,1 @@
-export const internalPrefix = (channel: string) => `__electron_ipc_mock__:${channel}`
+export const internalPrefix = (channel: string) => `__electron_mock_ipc__:${channel}`
