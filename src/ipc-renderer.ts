@@ -1,6 +1,7 @@
 import MockedEvent from './event'
 import { EventEmitter } from 'events'
 import { IpcRenderer, IpcRendererEvent } from 'electron'
+import { internalPrefix } from './utils'
 
 class ipcRenderer implements IpcRenderer {
   public emitter: EventEmitter
@@ -44,14 +45,15 @@ class ipcRenderer implements IpcRenderer {
   }
 
   invoke(channel: string, ...args: any[]): Promise<any> {
+    const safeChannel = internalPrefix(channel)
     return new Promise((resolve, reject) => {
-      this.emitter.once(channel, (_ev: IpcRendererEvent, ...args: any[]) => {
+      this.emitter.once(safeChannel, (_ev: IpcRendererEvent, ...args: any[]) => {
         resolve(...args)
       })
-      this.errorEmitter.once(channel, (_ev: IpcRendererEvent, err: any) => {
+      this.errorEmitter.once(safeChannel, (_ev: IpcRendererEvent, err: any) => {
         reject(err)
       })
-      this.emitter.emit('send-to-main', channel, ...args)
+      this.emitter.emit('send-to-main', safeChannel, ...args)
     })
   }
 

@@ -183,3 +183,40 @@ describe('registered event handlers are returned from #eventNames', () => {
     expect(ipcRenderer.eventNames()).toEqual(expect.arrayContaining(['test-event']))
   })
 })
+
+describe('invoke from renderer does not emit in renderer', () => {
+  let ipcMain: ipcMain
+  let ipcRenderer: ipcRenderer
+
+  beforeEach(() => {
+    const mocked = createIPCMock()
+    ipcMain = mocked.ipcMain
+    ipcRenderer = mocked.ipcRenderer
+  })
+
+  it('does not repeat when using invoke/handle', async () => {
+    const mainFn = jest.fn(() => 'hello')
+    const rendererFn = jest.fn()
+    ipcMain.handle('my-event', mainFn)
+    ipcRenderer.on('my-event', rendererFn)
+
+    const result = await ipcRenderer.invoke('my-event')
+    expect(result).toBe('hello')
+    expect(mainFn).toBeCalled()
+    expect(rendererFn).not.toBeCalled()
+  })
+
+  it('does not repeat when using send/on', (done) => {
+    const mainFn = jest.fn(() => 'hello')
+    const rendererFn = jest.fn()
+    ipcMain.on('my-event', mainFn)
+    ipcRenderer.on('my-event', rendererFn)
+    ipcRenderer.send('my-event')
+
+    setTimeout(() => {
+      expect(mainFn).toBeCalled()
+      expect(rendererFn).not.toBeCalled()
+      done()
+    })
+  })
+})
