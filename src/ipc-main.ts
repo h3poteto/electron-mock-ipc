@@ -1,6 +1,7 @@
 import MockedEvent from './event'
 import { EventEmitter } from 'events'
 import { IpcMain, IpcMainEvent, IpcMainInvokeEvent } from 'electron'
+import { internalPrefix } from './utils'
 
 class ipcMain implements IpcMain {
   public emitter: EventEmitter
@@ -37,23 +38,25 @@ class ipcMain implements IpcMain {
   }
 
   handle(channel: string, listener: (event: IpcMainInvokeEvent, ...args: any[]) => Promise<void> | any): void {
-    this.emitter.on(channel, async (event: IpcMainEvent, ...args: any[]) => {
+    const safeChannel = internalPrefix(channel)
+    this.emitter.on(safeChannel, async (event: IpcMainEvent, ...args: any[]) => {
       try {
         const res = await listener(event, ...args)
-        this.emitter.emit('send-to-renderer', channel, res)
+        this.emitter.emit('send-to-renderer', safeChannel, res)
       } catch (err) {
-        this.emitter.emit('error-to-renderer', channel, err)
+        this.emitter.emit('error-to-renderer', safeChannel, err)
       }
     })
   }
 
   handleOnce(channel: string, listener: (event: IpcMainInvokeEvent, ...args: any[]) => Promise<void> | any): void {
-    this.emitter.once(channel, async (event: IpcMainEvent, ...args: any[]) => {
+    const safeChannel = internalPrefix(channel)
+    this.emitter.once(safeChannel, async (event: IpcMainEvent, ...args: any[]) => {
       try {
         const res = await listener(event, ...args)
-        this.emitter.emit('send-to-renderer', channel, res)
+        this.emitter.emit('send-to-renderer', safeChannel, res)
       } catch (err) {
-        this.emitter.emit('error-to-renderer', channel, err)
+        this.emitter.emit('error-to-renderer', safeChannel, err)
       }
     })
   }
