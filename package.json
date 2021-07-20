@@ -5,7 +5,6 @@
   "main": "lib/src/index.js",
   "typings": "./lib/src/index.d.ts",
   "scripts": {
-    "prepare": "npm run build",
     "build": "tsc -p ./",
     "lint": "eslint --ext .js,.ts src test",
     "test": "NODE_ENV=test jest -u --maxWorkers=3"
