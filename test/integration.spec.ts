@@ -99,6 +99,15 @@ describe('send event from renderer to main', () => {
       })
       await expect(ipcRenderer.invoke('test-event', 'hoge')).rejects.toThrow(Error)
     })
+
+    it('removes event listeners it doesnt need', async () => {
+      ipcMain.handle('test-event', () => {})
+      for (let i = 0; i < 20; ++i) {
+        await ipcRenderer.invoke('test-event')
+      }
+      const event = ipcRenderer.errorEmitter.eventNames().find((n) => typeof n === 'string' && n.match(/test-event/)) as string
+      expect(ipcRenderer.errorEmitter.listenerCount(event)).toBe(0)
+    })
   })
 })
 
