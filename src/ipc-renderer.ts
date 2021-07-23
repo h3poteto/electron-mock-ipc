@@ -47,12 +47,17 @@ class ipcRenderer implements IpcRenderer {
   invoke(channel: string, ...args: any[]): Promise<any> {
     const safeChannel = internalPrefix(channel)
     return new Promise((resolve, reject) => {
-      this.emitter.once(safeChannel, (_ev: IpcRendererEvent, ...args: any[]) => {
+      const resolveFn = (_ev: IpcRendererEvent, ...args: any[]) => {
+        this.errorEmitter.removeListener(safeChannel, rejectFn)
         resolve(...args)
-      })
-      this.errorEmitter.once(safeChannel, (_ev: IpcRendererEvent, err: any) => {
+      }
+      const rejectFn = (_ev: IpcRendererEvent, err: any) => {
+        this.emitter.removeListener(safeChannel, resolveFn)
         reject(err)
-      })
+      }
+
+      this.emitter.once(safeChannel, resolveFn)
+      this.errorEmitter.once(safeChannel, rejectFn)
       this.emitter.emit('send-to-main', safeChannel, ...args)
     })
   }
