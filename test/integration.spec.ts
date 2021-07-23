@@ -259,7 +259,5 @@ describe('remove old listener', () => {
       const second = await ipcRenderer.invoke('test-event')
       expect(second).toBeFalsy()
     })
-
-    it()
   })
 })
