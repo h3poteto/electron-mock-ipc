@@ -62,7 +62,8 @@ class ipcMain implements IpcMain {
   }
 
   removeHandler(channel: string): void {
-    this.emitter.removeAllListeners(channel)
+    const safeChannel = internalPrefix(channel)
+    this.emitter.removeAllListeners(safeChannel)
   }
 
   /**

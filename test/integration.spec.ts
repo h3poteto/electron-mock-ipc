@@ -220,3 +220,44 @@ describe('invoke from renderer does not emit in renderer', () => {
     })
   })
 })
+
+describe('remove old listener', () => {
+  let ipcMain: ipcMain
+  let ipcRenderer: ipcRenderer
+
+  beforeEach(() => {
+    const mocked = createIPCMock()
+    ipcMain = mocked.ipcMain
+    ipcRenderer = mocked.ipcRenderer
+  })
+
+  describe('ipcMain', () => {
+    it('handle', async () => {
+      ipcMain.handle('test-event', async () => {
+        return true
+      })
+      const first = await ipcRenderer.invoke('test-event')
+      expect(first).toBeTruthy()
+      ipcMain.removeHandler('test-event')
+      ipcMain.handle('test-event', async () => {
+        return false
+      })
+      const second = await ipcRenderer.invoke('test-event')
+      expect(second).toBeFalsy()
+    })
+
+    it('handleOnce', async () => {
+      ipcMain.handleOnce('test-event', async () => {
+        return true
+      })
+      const first = await ipcRenderer.invoke('test-event')
+      expect(first).toBeTruthy()
+      ipcMain.removeHandler('test-event')
+      ipcMain.handleOnce('test-event', async () => {
+        return false
+      })
+      const second = await ipcRenderer.invoke('test-event')
+      expect(second).toBeFalsy()
+    })
+  })
+})
