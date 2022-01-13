@@ -1,69 +1,8 @@
 {
-  "name": "electron-mock-ipc",
-  "version": "0.3.11",
-  "description": "Mock Electron's ipcMain and ipcRenderer",
-  "main": "lib/src/index.js",
-  "typings": "./lib/src/index.d.ts",
-  "scripts": {
-    "build": "tsc -p ./",
-    "lint": "eslint --ext .js,.ts src test",
-    "test": "NODE_ENV=test jest -u --maxWorkers=3"
-  },
-  "files": [
-    "lib"
-  ],
-  "repository": "git@github.com:h3poteto/electron-mock-ipc.git",
-  "keywords": [
-    "electron",
-    "ipc",
-    "ipcMain",
-    "ipcRenderer"
-  ],
-  "author": "h3poteto",
-  "license": "MIT",
-  "jest": {
-    "moduleFileExtensions": [
-      "ts",
-      "js"
-    ],
-    "moduleNameMapper": {
-      "^@/(.+)": "<rootDir>/src/$1",
-      "^~/(.+)": "<rootDir>/$1"
-    },
-    "testMatch": [
-      "**/test/**/*.spec.ts"
-    ],
-    "preset": "ts-jest/presets/default",
-    "transform": {
-      "^.+\\.(ts|tsx)$": "ts-jest"
-    },
-    "globals": {
-      "ts-jest": {
-        "tsConfig": "tsconfig.json"
-      }
-    }
-  },
-  "peerDependencies": {
-    "electron": ">=6.0.0"
-  },
-  "devDependencies": {
-    "@types/core-js": "^2.5.2",
-    "@types/jest": "^27.4.0",
-    "@types/node": "^16.4.0",
-    "@typescript-eslint/eslint-plugin": "^1.11.0",
-    "@typescript-eslint/parser": "^1.11.0",
-    "eslint": "^5.16.0",
-    "eslint-config-prettier": "^6.7.0",
-    "eslint-config-standard": "^12.0.0",
-    "eslint-plugin-import": "^2.17.3",
-    "eslint-plugin-node": "^11.0.0",
-    "eslint-plugin-prettier": "^3.1.0",
-    "eslint-plugin-promise": "^4.1.1",
-    "eslint-plugin-standard": "^5.0.0",
-    "jest": "^27.0.6",
-    "prettier": "^2.0.2",
-    "ts-jest": "^27.0.3",
-    "typescript": "^3.5.2",
-    "electron": "^13.1.7"
-  }
+  "private": true,
+  "workspaces": [
+    "electron-mock-ipc",
+    "example/jest",
+    "example/mocha"
+  ]
 }

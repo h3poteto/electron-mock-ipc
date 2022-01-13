@@ -20,9 +20,9 @@ jobs:
         yarn install
     - name: Build
       run: |
-        yarn run build
+        yarn workspace electron-mock-ipc run build
     - name: Publish
       run: |
-        yarn publish
+        yarn workspace electron-mock-ipc publish
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
