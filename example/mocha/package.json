@@ -8,7 +8,7 @@
     "spec": "NODE_ENV=test mocha -r ts-node/register ./spec/**/*.spec.ts"
   },
   "dependencies": {
-    "electron": "9.4.0",
+    "electron": "11.5.0",
     "electron-mock-ipc": "file:../../"
   },
   "devDependencies": {
