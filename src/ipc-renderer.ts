@@ -49,7 +49,7 @@ class ipcRenderer implements IpcRenderer {
     return new Promise((resolve, reject) => {
       const resolveFn = (_ev: IpcRendererEvent, ...args: any[]) => {
         this.errorEmitter.removeListener(safeChannel, rejectFn)
-        resolve(...args)
+        resolve([...args])
       }
       const rejectFn = (_ev: IpcRendererEvent, err: any) => {
         this.emitter.removeListener(safeChannel, resolveFn)
