@@ -1,15 +1,14 @@
-name: Release
+name: reviewdog
 
 on:
-  release:
-    types: [published]
+  pull_request:
 
 jobs:
-  release:
+  eslint:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@master
     - name: Use Node.js 16.x
       uses: actions/setup-node@v1
       with:
@@ -18,11 +17,9 @@ jobs:
     - name: Install dependencies
       run: |
         yarn install
-    - name: Build
-      run: |
-        yarn run build
-    - name: Publish
-      run: |
-        yarn publish
+    - uses: reviewdog/action-setup@v1
+    - name: Run eslint
       env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        REVIEWDOG_GITHUB_API_TOKEN: ${{ github.token }}
+      run: |
+        yarn lint | reviewdog -f=eslint -reporter=github-pr-review
