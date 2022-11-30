@@ -64,6 +64,6 @@
     "prettier": "^2.0.2",
     "ts-jest": "^27.0.3",
     "typescript": "^3.5.2",
-    "electron": "^16.0.7"
+    "electron": "^22.0.0"
   }
 }
