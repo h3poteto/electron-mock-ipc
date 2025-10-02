@@ -25,12 +25,36 @@ jobs:
       id-token: write
       actions: read # Required for Claude to read CI results on PRs
     steps:
+      - name: Check user permission
+        id: check_permission
+        run: |
+          # Get the actor who triggered the event
+          ACTOR="${{ github.event.comment.user.login || github.event.review.user.login || github.event.issue.user.login }}"
+          echo "Checking permissions for user: $ACTOR"
+
+          # Check if user has write permission to the repository
+          PERMISSION=$(gh api repos/${{ github.repository }}/collaborators/$ACTOR/permission --jq '.permission')
+          echo "User permission: $PERMISSION"
+
+          if [[ "$PERMISSION" == "admin" || "$PERMISSION" == "write" ]]; then
+            echo "User has sufficient permissions"
+            echo "has_permission=true" >> $GITHUB_OUTPUT
+          else
+            echo "User does not have sufficient permissions"
+            echo "has_permission=false" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Checkout repository
+        if: steps.check_permission.outputs.has_permission == 'true'
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
 
       - name: Run Claude Code
+        if: steps.check_permission.outputs.has_permission == 'true'
         id: claude
         uses: anthropics/claude-code-action@v1
         with:
