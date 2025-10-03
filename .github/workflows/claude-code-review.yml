@@ -12,9 +12,10 @@ on:
 
 jobs:
   claude-review:
-    # Skip bot-created PRs (dependabot, renovate, etc.)
+    # Only run for external contributors (skip bots and repository owner/members)
     if: |
-      github.event.pull_request.user.type != 'Bot'
+      github.event.pull_request.user.type != 'Bot' &&
+      github.event.pull_request.head.repo.full_name != github.repository
 
     runs-on: ubuntu-latest
     permissions:
