@@ -1,6 +1,6 @@
 {
   "name": "electron-mock-ipc",
-  "version": "0.3.12",
+  "version": "0.3.13",
   "description": "Mock Electron's ipcMain and ipcRenderer",
   "main": "lib/src/index.js",
   "typings": "./lib/src/index.d.ts",
@@ -9,30 +9,18 @@
     "lint": "eslint src test",
     "test": "NODE_ENV=test jest -u --maxWorkers=3"
   },
-  "files": [
-    "lib"
-  ],
+  "files": ["lib"],
   "repository": "git@github.com:h3poteto/electron-mock-ipc.git",
-  "keywords": [
-    "electron",
-    "ipc",
-    "ipcMain",
-    "ipcRenderer"
-  ],
+  "keywords": ["electron", "ipc", "ipcMain", "ipcRenderer"],
   "author": "h3poteto",
   "license": "MIT",
   "jest": {
-    "moduleFileExtensions": [
-      "ts",
-      "js"
-    ],
+    "moduleFileExtensions": ["ts", "js"],
     "moduleNameMapper": {
       "^@/(.+)": "<rootDir>/src/$1",
       "^~/(.+)": "<rootDir>/$1"
     },
-    "testMatch": [
-      "**/test/**/*.spec.ts"
-    ],
+    "testMatch": ["**/test/**/*.spec.ts"],
     "preset": "ts-jest/presets/default",
     "transform": {
       "^.+\\.(ts|tsx)$": "ts-jest"
