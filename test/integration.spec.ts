@@ -105,7 +105,7 @@ describe('send event from renderer to main', () => {
       for (let i = 0; i < 20; ++i) {
         await ipcRenderer.invoke('test-event')
       }
-      const event = ipcRenderer.errorEmitter.eventNames().find((n) => typeof n === 'string' && n.match(/test-event/)) as string
+      const event = ipcRenderer.errorEmitter.eventNames().find(n => typeof n === 'string' && n.match(/test-event/)) as string
       expect(ipcRenderer.errorEmitter.listenerCount(event)).toBe(0)
     })
   })
@@ -215,7 +215,7 @@ describe('invoke from renderer does not emit in renderer', () => {
     expect(rendererFn).not.toBeCalled()
   })
 
-  it('does not repeat when using send/on', (done) => {
+  it('does not repeat when using send/on', done => {
     const mainFn = jest.fn(() => 'hello')
     const rendererFn = jest.fn()
     ipcMain.on('my-event', mainFn)

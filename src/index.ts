@@ -24,7 +24,7 @@ const createIPCMock = (): Mock => {
   pipe(main, renderer)
   const mock: Mock = {
     ipcMain: main,
-    ipcRenderer: renderer,
+    ipcRenderer: renderer
   }
   return mock
 }

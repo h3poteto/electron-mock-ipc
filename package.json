@@ -6,7 +6,7 @@
   "typings": "./lib/src/index.d.ts",
   "scripts": {
     "build": "tsc -p ./",
-    "lint": "eslint --ext .js,.ts src test",
+    "lint": "eslint src test",
     "test": "NODE_ENV=test jest -u --maxWorkers=3"
   },
   "files": [
@@ -50,19 +50,19 @@
     "@types/core-js": "^2.5.2",
     "@types/jest": "^27.4.0",
     "@types/node": "^18.19.0",
-    "@typescript-eslint/eslint-plugin": "^5.62.0",
-    "@typescript-eslint/parser": "^5.62.0",
-    "eslint": "^8.57.0",
+    "@typescript-eslint/eslint-plugin": "^8.18.2",
+    "@typescript-eslint/parser": "^8.18.2",
+    "eslint": "^9.17.0",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-n": "^17.14.0",
     "eslint-plugin-prettier": "^5.2.1",
-    "eslint-plugin-promise": "^6.6.0",
+    "eslint-plugin-promise": "^7.2.1",
     "jest": "^27.0.6",
     "prettier": "^2.0.2",
     "ts-jest": "^27.0.3",
     "typescript": "^4.9.5",
-    "electron": "^35.0.0"
+    "electron": "^35.0.0",
+    "typescript-eslint": "^8.18.2"
   }
 }
