@@ -61,7 +61,7 @@
     "jest": "^27.0.6",
     "prettier": "^2.0.2",
     "ts-jest": "^27.0.3",
-    "typescript": "^4.9.5",
+    "typescript": "^5.0.0",
     "electron": "^35.0.0",
     "typescript-eslint": "^8.18.2"
   }
