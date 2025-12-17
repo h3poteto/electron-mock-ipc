@@ -37,7 +37,7 @@
   "devDependencies": {
     "@types/core-js": "^2.5.2",
     "@types/jest": "^27.4.0",
-    "@types/node": "^18.19.0",
+    "@types/node": "^25.0.3",
     "@typescript-eslint/eslint-plugin": "^8.18.2",
     "@typescript-eslint/parser": "^8.18.2",
     "eslint": "^9.17.0",
