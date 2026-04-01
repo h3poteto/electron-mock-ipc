@@ -50,7 +50,7 @@
     "prettier": "^3.0.0",
     "ts-jest": "^27.0.3",
     "typescript": "^5.0.0",
-    "electron": "^39.0.0",
+    "electron": "^41.0.0",
     "typescript-eslint": "^8.18.2"
   }
 }
